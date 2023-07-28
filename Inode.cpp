@@ -63,7 +63,6 @@ namespace TarnishedGroot {
         this->numBytes = ConvertToBytes(this->size, (int) this->fileUnits);
         this->numBlocks = CalculateNumBlocks(this->numBytes, this->block_size);
         this->pointersPerBlock = this->block_size / this->ptr_size;
-        //CalculateNumPointerBlocks(numDirectBlocks, numIndirectBlocks, numDoubleBlocks, totalBlocks);
         CalculateNumPointerBlocks();
     }
 
