@@ -13,13 +13,13 @@
 
 int main(int argc, char* argv[]) {
 
-    const std::string usage = "Not enough info!\nUsage: ./inodeCalc filesize units ptrSize blockSize";
+    const char* usage = "Not enough info!\nUsage: ./inodeCalc filesize units ptrSize blockSize";
     int blockSize, ptrSize, fileSize;
     std::string unit;
 
     if (argc < 2 || argc > 5) {
         //argc will always be at least 1 as argv[0] is the program name
-        std::cout << usage << std::endl;
+        printf("%s\n",usage);
         return EXIT_FAILURE;
     }
 
@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
         blockSize = stoi(args[3]);
     }
     catch (std::invalid_argument const &except) {
-        std::cout << "Error: Invalid Argument" << std::endl;
+        printf("Error: Invalid Argument\n");
         return EXIT_FAILURE;
     }
 
