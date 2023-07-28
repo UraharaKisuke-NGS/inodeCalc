@@ -5,7 +5,7 @@
 #include "Inode.hpp"
 
 namespace TarnishedGroot {
-    long int TarnishedGroot::Inode::ConvertToBytes(int file_size, int unit_enum_rep) {
+    long int TarnishedGroot::Inode::ConvertToBytes(int _file_size, int unit_enum_rep) {
         const int rule = 1024;
         int exponent;
         switch (unit_enum_rep) {
@@ -24,21 +24,21 @@ namespace TarnishedGroot {
             default:
                 exponent = 1;
         }
-        return (file_size * (long) pow(rule, exponent));
+        return (_file_size * (long) pow(rule, exponent));
     }
 
-    int TarnishedGroot::Inode::CalculateNumBlocks(long file_size, int block_size) {
+    int TarnishedGroot::Inode::CalculateNumBlocks(long _file_size, int _block_size) {
         //File size should be in BYTES
-        if (block_size <= 0 || file_size <= 0)
+        if (_block_size <= 0 || _file_size <= 0)
             return 0;
-        return (int) (file_size / block_size);
+        return (int) (_file_size / _block_size);
     }
 
     TarnishedGroot::Inode::Inode(int file_size, const std::string &_unit, int _ptr_size, int _block_size){
         this->size = file_size;
         this->_fileUnit = _unit;
-        this->ptr_size = ptr_size;
-        this->block_size = block_size;
+        this->ptr_size = _ptr_size;
+        this->block_size = _block_size;
         init();
     }
 
@@ -63,18 +63,16 @@ namespace TarnishedGroot {
         this->numBytes = ConvertToBytes(this->size, (int) this->fileUnits);
         this->numBlocks = CalculateNumBlocks(this->numBytes, this->block_size);
         this->pointersPerBlock = this->block_size / this->ptr_size;
-        CalculateNumPointerBlocks(&numDirectBlocks, &numIndirectBlocks, &numDoubleBlocks, &totalBlocks);
+        //CalculateNumPointerBlocks(numDirectBlocks, numIndirectBlocks, numDoubleBlocks, totalBlocks);
+        CalculateNumPointerBlocks();
     }
 
-    void TarnishedGroot::Inode::CalculateNumPointerBlocks(int *_numDirectBlocks, int *_numIndirectBlocks, int *_numDoubleBlocks,
-                                          int *_totalBlocks) const {
-
-        *_numDirectBlocks = ceil((double) (this->numBlocks - 12) / pointersPerBlock);
-        *_numIndirectBlocks = ceil((double) (*_numDirectBlocks - 1) / pointersPerBlock);
-        *_numDoubleBlocks = ceil((double) (*_numIndirectBlocks - 1) / pointersPerBlock);
-        *_totalBlocks = this->numBlocks + *_numDirectBlocks + *_numIndirectBlocks + *_numDoubleBlocks;
+    void TarnishedGroot::Inode::CalculateNumPointerBlocks(){
+        this->numDirectBlocks = ceil((double) (this->numBlocks - 12) / this->pointersPerBlock);
+        this->numIndirectBlocks = ceil((double) (this->numDirectBlocks - 1) / this->pointersPerBlock);
+        this->numDoubleBlocks = ceil((double) (this->numIndirectBlocks - 1) / this->pointersPerBlock);
+        this->totalBlocks = this->numBlocks + this->numDirectBlocks + this->numIndirectBlocks + this->numDoubleBlocks;
     }
-
     void TarnishedGroot::Inode::Output() {
         printf("============================\n"
                "=========INODE INFO=========\n"

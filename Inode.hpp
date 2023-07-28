@@ -27,13 +27,10 @@ namespace TarnishedGroot {
         long int numBytes{};
         int numBlocks{}, numDirectBlocks{}, numIndirectBlocks{}, numDoubleBlocks{}, totalBlocks{};
 
-        static long int ConvertToBytes(int file_size, int unit_enum_rep);
+        static long int ConvertToBytes(int _file_size, int unit_enum_rep);
 
-        static int CalculateNumBlocks(long int file_size, int block_size);
-
-        void CalculateNumPointerBlocks(int *_numDirectBlocks, int *_numIndirectBlocks, int *_numDoubleBlocks,
-                                       int *_totalBlocks) const;
-
+        static int CalculateNumBlocks(long int _file_size, int _block_size);
+        void CalculateNumPointerBlocks();
         std::string _fileUnit;
 
         void init();
